@@ -56,7 +56,15 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
     private void handleThisDeviceChangedAction(Intent intent) {
 
     }
-    
+
+    private void handleStateChangedAction(Intent intent) {
+
+    }
+
+    private void handlePeersChangedAction(Intent intent) {
+
+    }
+
     private void handleDiscoveryChangedAction(Intent intent) {
         int state = intent.getIntExtra(WifiP2pManager.EXTRA_DISCOVERY_STATE, -1);
         switch (state) {
