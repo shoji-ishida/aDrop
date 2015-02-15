@@ -34,12 +34,16 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
 
         switch (action) {
             case WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION:
+                handleConnectionChangedAction(intent);
                 break;
             case WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION:
+                handleThisDeviceChangedAction(intent);
                 break;
             case WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION:
+                handleStateChangedAction(intent);
                 break;
             case WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION:
+                handlePeersChangedAction(intent);
                 break;
             case WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION:
                 handleDiscoveryChangedAction(intent);
