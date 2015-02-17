@@ -3,9 +3,14 @@ package jp.nemustech.adrop;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.NetworkInfo;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
+
+import java.util.Collection;
 
 
 /**
@@ -54,19 +59,29 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void handleConnectionChangedAction(Intent intent) {
-
+        NetworkInfo networkInfo = (NetworkInfo) intent
+                .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
     }
 
     private void handleThisDeviceChangedAction(Intent intent) {
-
+        WifiP2pDevice device = (WifiP2pDevice) intent
+                .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
+        Log.d(TAG, "Device status = " + device.status);
     }
 
     private void handleStateChangedAction(Intent intent) {
-
+        int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+        String stateMsg = (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) ? "Enabled" : "Disabled";
+        Log.d(TAG, "P2P state changed - " + stateMsg);
     }
 
     private void handlePeersChangedAction(Intent intent) {
-
+        WifiP2pDeviceList deviceList = (WifiP2pDeviceList) intent
+                .getParcelableExtra(WifiP2pManager.EXTRA_P2P_DEVICE_LIST);
+        Collection<WifiP2pDevice> devices = deviceList.getDeviceList();
+        for (WifiP2pDevice device: devices) {
+            Log.d(TAG, "P2P Device: " + device.deviceName + " " + device.status);
+        }
     }
 
     private void handleDiscoveryChangedAction(Intent intent) {

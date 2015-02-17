@@ -66,6 +66,9 @@ public class aDropService extends Service implements ChannelListener, Connection
             receiver = new aDropBroadcastReceiver(manager, channel, this);
             registerReceiver(receiver, intentFilter);
         }
+        if (service == null) {
+            addLocalService();
+        }
     }
 
     @Override
