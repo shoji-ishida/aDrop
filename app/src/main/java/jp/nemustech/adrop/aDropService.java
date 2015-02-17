@@ -47,6 +47,7 @@ public class aDropService extends Service implements ChannelListener, Connection
         userName = mCursor.getString(nameIndex);
         mCursor.close();
 
+        intentFilter = new IntentFilter();
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_DISCOVERY_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
         intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
