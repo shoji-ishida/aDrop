@@ -32,6 +32,7 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), this);
+        initDnsSd();
     }
 
     @Override
@@ -52,7 +53,6 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
     @Override
     protected void onPause() {
         super.onPause();
-        stopDiscovery();
         servicesList.listAdapter.clear();
     }
 
@@ -89,7 +89,7 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
         return super.onOptionsItemSelected(item);
     }
 
-    private void startDiscovery() {
+    private void initDnsSd() {
         manager.setDnsSdResponseListeners(channel,
                 new WifiP2pManager.DnsSdServiceResponseListener() {
 
@@ -168,6 +168,10 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
                         Log.d(TAG, "Failed adding service discovery request");
                     }
                 });
+
+    }
+
+    private void startDiscovery() {
         manager.discoverServices(channel, new WifiP2pManager.ActionListener() {
 
             @Override
