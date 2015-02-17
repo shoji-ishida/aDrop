@@ -35,6 +35,11 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
     }
@@ -47,6 +52,8 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
     @Override
     protected void onPause() {
         super.onPause();
+        stopDiscovery();
+        servicesList.listAdapter.clear();
     }
 
     @Override
@@ -174,6 +181,24 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
 
             }
         });
+    }
+
+    private void stopDiscovery() {
+        if (serviceRequest != null) {
+            manager.removeServiceRequest(channel, serviceRequest,
+                    new WifiP2pManager.ActionListener() {
+
+                        @Override
+                        public void onSuccess() {
+                            Log.d(TAG, "Removed Service discovery request.");
+                        }
+
+                        @Override
+                        public void onFailure(int arg0) {
+                            Log.d(TAG, "Failed to remove Service discovery request.");
+                        }
+                    });
+        }
     }
 
     @Override
