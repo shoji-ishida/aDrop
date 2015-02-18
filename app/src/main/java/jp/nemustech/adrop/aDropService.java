@@ -73,6 +73,11 @@ public class aDropService extends Service implements ChannelListener, Connection
     }
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
+    @Override
     public void onDestroy() {
         unregisterReceiver(receiver);
         removeLocalService();

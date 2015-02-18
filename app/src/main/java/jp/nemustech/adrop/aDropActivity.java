@@ -31,35 +31,54 @@ public class aDropActivity extends Activity implements WifiP2pManager.ChannelLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-        channel = manager.initialize(this, getMainLooper(), this);
+        Log.d(TAG, "On Create");
+        if (manager == null) {
+            Log.d(TAG, "Get WifiP2pManager");
+            manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+        }
+        if (channel == null) {
+            Log.d(TAG, "Initialize Channel");
+            channel = manager.initialize(this, getMainLooper(), this);
+        }
         initDnsSd();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "On Start");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        Log.d(TAG, "On Restart");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Log.d(TAG, "On Stop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "On Destroy");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "On Pause");
+        //stopDiscovery();
         servicesList.listAdapter.clear();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "On Resume");
         servicesList = new aDropDnsServicesList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, servicesList, FRAGMENT_TAG).commit();
@@ -192,24 +211,22 @@ public class aDropActivity extends Activity implements WifiP2pManager.ChannelLis
 
     private void stopDiscovery() {
         if (serviceRequest != null) {
-            manager.removeServiceRequest(channel, serviceRequest,
-                    new WifiP2pManager.ActionListener() {
+            manager.stopPeerDiscovery(channel, new WifiP2pManager.ActionListener() {
+                @Override
+                public void onSuccess() {
+                    Log.d(TAG, "Stop Service discovery.");
+                }
 
-                        @Override
-                        public void onSuccess() {
-                            Log.d(TAG, "Removed Service discovery request.");
-                        }
-
-                        @Override
-                        public void onFailure(int arg0) {
-                            Log.d(TAG, "Failed to remove Service discovery request.");
-                        }
-                    });
+                @Override
+                public void onFailure(int arg0) {
+                    Log.d(TAG, "Failed to Stop Service discovery.");
+                }
+            });
         }
     }
 
     @Override
     public void onChannelDisconnected() {
-
+        Log.d(TAG, "Channel disconnected");
     }
 }
