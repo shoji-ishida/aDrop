@@ -61,6 +61,8 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
     private void handleConnectionChangedAction(Intent intent) {
         NetworkInfo networkInfo = (NetworkInfo) intent
                 .getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+        Log.d(TAG, "Connection changed: " + networkInfo);
+
     }
 
     private void handleThisDeviceChangedAction(Intent intent) {
@@ -78,10 +80,12 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
     private void handlePeersChangedAction(Intent intent) {
         WifiP2pDeviceList deviceList = (WifiP2pDeviceList) intent
                 .getParcelableExtra(WifiP2pManager.EXTRA_P2P_DEVICE_LIST);
+        StringBuffer strBuf = new StringBuffer();
         Collection<WifiP2pDevice> devices = deviceList.getDeviceList();
         for (WifiP2pDevice device: devices) {
-            Log.d(TAG, "P2P Device: " + device.deviceName + " " + device.status);
+            strBuf.append("{" + device.deviceName + " " + device.status + "},");
         }
+        Log.d(TAG, "P2P Device: " + strBuf);
     }
 
     private void handleDiscoveryChangedAction(Intent intent) {
