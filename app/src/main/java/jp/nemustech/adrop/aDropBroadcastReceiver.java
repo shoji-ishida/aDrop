@@ -68,7 +68,7 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
     private void handleThisDeviceChangedAction(Intent intent) {
         WifiP2pDevice device = (WifiP2pDevice) intent
                 .getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);
-        Log.d(TAG, "Device status = " + device.status);
+        Log.d(TAG, "Device status = " + aDropDnsServicesList.getDeviceStatus(device.status));
     }
 
     private void handleStateChangedAction(Intent intent) {
@@ -83,7 +83,7 @@ public class aDropBroadcastReceiver extends BroadcastReceiver {
         StringBuffer strBuf = new StringBuffer();
         Collection<WifiP2pDevice> devices = deviceList.getDeviceList();
         for (WifiP2pDevice device: devices) {
-            strBuf.append("{" + device.deviceName + " " + device.status + "},");
+            strBuf.append("{" + device.deviceName + " " + aDropDnsServicesList.getDeviceStatus(device.status) + "},");
         }
         Log.d(TAG, "P2P Device: " + strBuf);
     }

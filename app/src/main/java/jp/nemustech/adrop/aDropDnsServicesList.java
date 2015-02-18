@@ -3,6 +3,7 @@ package jp.nemustech.adrop;
 
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +42,12 @@ public class aDropDnsServicesList extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-
+        Intent intent = new Intent(getActivity(), aDropService.class);
+        intent.setAction(aDropService.REQUEST_CONNECT);
+        aDropDnsService service = (aDropDnsService)l.getItemAtPosition(position);
+        WifiP2pDevice device = service.device;
+        intent.putExtra(aDropService.EXTRA_P2P_DEVICE, device);
+        getActivity().startService(intent);
     }
 
     public class WiFiDevicesAdapter extends ArrayAdapter<aDropDnsService> {

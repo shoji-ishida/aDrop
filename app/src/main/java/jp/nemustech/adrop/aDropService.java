@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.wifi.WpsInfo;
+import android.net.wifi.p2p.WifiP2pConfig;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
@@ -20,6 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class aDropService extends Service implements ChannelListener, ConnectionInfoListener {
+    public static final String REQUEST_CONNECT = "jp.nemustech.adrop.REQUEST_CONNECT";
+    public static final String EXTRA_P2P_DEVICE = "p2pDevice";
+
     private static final String TAG = "aDropService";
     private String userName;
     private IntentFilter intentFilter;
@@ -74,6 +80,17 @@ public class aDropService extends Service implements ChannelListener, Connection
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "id = " + startId + ":" + intent);
+        String action = intent.getAction();
+        if (action == null) return START_STICKY;
+
+        switch (action) {
+            case REQUEST_CONNECT:
+                handleRequestConnect(intent);
+                break;
+            default:
+                Log.d(TAG, "unknown intent action");
+        }
         return START_STICKY;
     }
 
@@ -152,5 +169,32 @@ public class aDropService extends Service implements ChannelListener, Connection
                 Log.d(TAG, "Failed to remove a service: " + error);
             }
         });
+    }
+
+    private void handleRequestConnect(Intent intent) {
+        WifiP2pDevice device = intent.getParcelableExtra(EXTRA_P2P_DEVICE);
+
+        WifiP2pConfig config = new WifiP2pConfig();
+        config.deviceAddress = device.deviceAddress;
+        // set least inclination to become Group owner for sender
+        // to make receiver as a Group owner where Socket Server will be started
+        config.groupOwnerIntent = 0;
+        config.wps.setup = WpsInfo.PBC;
+
+        Log.d(TAG, "Connecting to " + device);
+
+        manager.connect(channel, config, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "Connecting to service");
+            }
+
+            @Override
+            public void onFailure(int errorCode) {
+                Log.d(TAG, "Failed connecting to service:" + errorCode);
+            }
+        });
+
     }
 }
