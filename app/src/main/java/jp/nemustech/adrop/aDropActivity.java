@@ -1,10 +1,11 @@
 package jp.nemustech.adrop;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class aDropActivity extends ActionBarActivity implements WifiP2pManager.ChannelListener {
+public class aDropActivity extends Activity implements WifiP2pManager.ChannelListener {
     private static final String TAG = "aDropActivity";
     public static final String FRAGMENT_TAG = "devices";
 
@@ -59,10 +60,10 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
     @Override
     protected void onResume() {
         super.onResume();
-
         servicesList = new aDropDnsServicesList();
         getFragmentManager().beginTransaction()
                 .add(R.id.container, servicesList, FRAGMENT_TAG).commit();
+
         startDiscovery();
     }
 
@@ -83,6 +84,8 @@ public class aDropActivity extends ActionBarActivity implements WifiP2pManager.C
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
