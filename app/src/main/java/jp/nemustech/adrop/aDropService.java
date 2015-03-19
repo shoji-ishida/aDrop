@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
@@ -16,6 +17,7 @@ import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceInfo;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -33,6 +35,7 @@ public class aDropService extends Service implements ChannelListener, Connection
     private Channel channel;
     private WifiP2pDnsSdServiceInfo service;
     private BroadcastReceiver receiver;
+    private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
 
     public aDropService() {
     }
